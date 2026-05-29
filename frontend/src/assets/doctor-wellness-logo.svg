@@ -1,0 +1,10 @@
+<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Doctor Wellness logo</title>
+  <desc id="desc">A green medical wellness mark with a cross and leaf.</desc>
+  <rect x="2" y="2" width="40" height="40" rx="14" fill="#0D6B00"/>
+  <path d="M22 10C16.4772 10 12 14.4772 12 20V25.5C12 30.1944 15.8056 34 20.5 34H22C27.5228 34 32 29.5228 32 24V22C32 15.3726 26.6274 10 20 10H22Z" fill="#6DFF53" fill-opacity="0.25"/>
+  <path d="M21.9999 12.5C18.134 12.5 14.9999 15.634 14.9999 19.5V22.25C14.9999 27.3586 19.1413 31.5 24.2499 31.5C27.9778 31.5 30.9999 28.4779 30.9999 24.75V23.5C30.9999 17.4249 26.075 12.5 19.9999 12.5H21.9999Z" stroke="#ECFFDD" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M22 16.25V27.75" stroke="#ECFFDD" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M16.25 22H27.75" stroke="#ECFFDD" stroke-width="2.8" stroke-linecap="round"/>
+  <path d="M28.5 13.5C31.258 14.0986 33.4014 16.242 34 19C31.242 18.4014 29.0986 16.258 28.5 13.5Z" fill="#ECFFDD"/>
+</svg>
