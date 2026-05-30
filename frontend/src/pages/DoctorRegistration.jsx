@@ -373,11 +373,15 @@ function DoctorRegistration() {
         throw new Error(result.details || result.message || 'Unable to verify OTP');
       }
 
+      // Cache verified doctor details for MPIN setup
+      sessionStorage.setItem('verifiedDoctorId', result.id);
+      sessionStorage.setItem('verifiedDoctorEmail', formData.email);
+
       sessionStorage.removeItem(draftStorageKey);
       sessionStorage.removeItem(draftIdStorageKey);
       setDraftId('');
       setOtp('');
-      window.location.pathname = '/dashboard';
+      window.location.pathname = '/setup-mpin';
     } catch (error) {
       setSubmitStatus(`Could not verify OTP: ${error.message}`);
     } finally {

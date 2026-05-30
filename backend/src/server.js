@@ -360,6 +360,56 @@ app.post('/api/doctor-registrations/verify-otp', async (req, res) => {
   }
 });
 
+app.post('/api/doctor-registrations/setup-mpin', async (req, res) => {
+  if (!isDatabaseReady()) {
+    return res.status(503).json({ message: 'Database is not connected' });
+  }
+
+  const { id, email, mpin } = req.body;
+  const normalizedEmail = normalizeEmail(email);
+
+  if (!id || !normalizedEmail || !mpin) {
+    return res.status(400).json({ message: 'Missing required parameters. Make sure id, email, and mpin are provided.' });
+  }
+
+  if (!/^\d{4}$/.test(mpin)) {
+    return res.status(400).json({ message: 'MPIN must be exactly a 4-digit number' });
+  }
+
+  try {
+    const query = mongoose.Types.ObjectId.isValid(id)
+      ? { _id: id, email: normalizedEmail }
+      : { email: normalizedEmail };
+
+    const registration = await DoctorRegistration.findOne(query);
+
+    if (!registration) {
+      return res.status(404).json({ message: 'Doctor registration not found for the provided details' });
+    }
+
+    if (registration.status !== 'verified') {
+      return res.status(400).json({ message: 'Please complete OTP verification before setting up your MPIN' });
+    }
+
+    // Hash the MPIN using SHA-256 for data protection
+    const hashed = crypto.createHash('sha256').update(mpin).digest('hex');
+    registration.mpin = hashed;
+    await registration.save();
+
+    return res.status(200).json({
+      id: registration._id,
+      status: registration.status,
+      message: 'MPIN configured successfully'
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Unable to set MPIN',
+      details: error.message
+    });
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Backend running on http://localhost:${port}`);
 });

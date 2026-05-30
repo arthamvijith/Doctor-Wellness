@@ -3288,3 +3288,254 @@ button {
   to { opacity: 1; transform: translateX(0); }
 }
 
+/* ==========================================
+   Premium MPIN Setup Styling
+   ========================================== */
+
+.eyebrow-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--primary);
+  background: var(--primary-pale);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.mpin-session-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 0;
+  gap: 20px;
+}
+
+.session-error-icon {
+  color: #ea4335;
+  filter: drop-shadow(0 8px 16px rgba(234, 67, 53, 0.15));
+  animation: floatError 3s ease-in-out infinite alternate;
+}
+
+@keyframes floatError {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-6px); }
+}
+
+.mpin-session-error p {
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 420px;
+  margin: 0;
+}
+
+.mpin-redirect-button {
+  margin-top: 10px;
+  width: 100%;
+  max-width: 280px;
+}
+
+.mpin-card-heading {
+  font-size: 24px !important;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+/* MPIN Custom Alerts */
+.mpin-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.45;
+  border: 1px solid transparent;
+  animation: slideAlert 260ms ease-out;
+}
+
+.mpin-alert.error {
+  color: #9b1c1c;
+  background: #fdf2f2;
+  border-color: #fde2e2;
+}
+
+.mpin-alert.success {
+  color: #03543f;
+  background: #f3faf7;
+  border-color: #def7ec;
+}
+
+@keyframes slideAlert {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Input Fields Grid layout */
+.mpin-input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (max-width: 580px) {
+  .mpin-input-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.mpin-input-wrapper {
+  display: grid;
+  gap: 10px;
+  color: #253237;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mpin-field-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.field-prefix {
+  position: absolute;
+  left: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8fa0a8;
+  pointer-events: none;
+  transition: color 180ms ease;
+}
+
+.mpin-field-container input {
+  width: 100%;
+  height: 58px;
+  padding: 0 48px 0 46px !important;
+  color: var(--text) !important;
+  background: #f8fafb !important;
+  border: 1px solid #c9d4da !important;
+  border-radius: 12px !important;
+  font: inherit !important;
+  font-size: 22px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.12em !important;
+  text-align: center !important;
+  outline: 0 !important;
+  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease !important;
+}
+
+.mpin-field-container input:focus {
+  background: #fff !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(13, 107, 0, 0.1) !important;
+}
+
+.mpin-field-container input:focus ~ .field-prefix {
+  color: var(--primary);
+}
+
+.mpin-toggle-btn {
+  position: absolute;
+  right: 14px;
+  background: none;
+  border: none;
+  color: #8fa0a8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  transition: color 180ms ease, background-color 180ms ease;
+}
+
+.mpin-toggle-btn:hover {
+  color: var(--primary);
+  background-color: rgba(13, 107, 0, 0.06);
+}
+
+/* Matching badges and buttons */
+.mpin-match-badge-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: -6px;
+}
+
+.mpin-match-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  border: 1px solid transparent;
+}
+
+.mpin-match-badge.match {
+  color: #0d6b00;
+  background: #e6f7e8;
+  border-color: #cceecc;
+}
+
+.mpin-match-badge.mismatch {
+  color: #ea4335;
+  background: #fdf0ef;
+  border-color: #fcdbd8;
+}
+
+.mpin-actions {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+
+.mpin-submit-button {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 56px;
+  padding: 0 24px;
+  color: #fff;
+  background: var(--primary);
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 0 0 rgba(13, 107, 0, 0);
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.mpin-submit-button:hover:not(:disabled) {
+  background-color: #0f7d00;
+  box-shadow: 0 12px 24px rgba(13, 107, 0, 0.18);
+  transform: translateY(-2px);
+}
+
+.mpin-submit-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.mpin-submit-button:disabled {
+  background-color: #dfe8ed;
+  color: #a0aab0;
+  cursor: not-allowed;
+}
+
+

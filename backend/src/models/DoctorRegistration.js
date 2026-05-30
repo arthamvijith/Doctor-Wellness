@@ -24,6 +24,7 @@ const doctorRegistrationSchema = new mongoose.Schema(
     otpHash: { type: String },
     otpExpiresAt: { type: Date },
     otpVerifiedAt: { type: Date },
+    mpin: { type: String, trim: true },
     lastCompletedStep: { type: Number, default: 0 },
     status: {
       type: String,
