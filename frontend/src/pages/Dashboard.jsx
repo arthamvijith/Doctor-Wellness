@@ -44,6 +44,29 @@ function Dashboard() {
   const [scribeText, setScribeText] = useState('');
   const [activeTab, setActiveTab] = useState('Overview');
   const [timeStr, setTimeStr] = useState('');
+  const [doctorName, setDoctorName] = useState('Dr. Vijith Artham');
+  const [doctorSpecialization, setDoctorSpecialization] = useState('General Medicine');
+
+  // Load customized doctor details
+  useEffect(() => {
+    try {
+      const cached = localStorage.getItem('loggedInDoctor');
+      if (cached) {
+        const doc = JSON.parse(cached);
+        if (doc && doc.fullName) {
+          const formattedName = doc.fullName.toLowerCase().startsWith('dr.') 
+            ? doc.fullName 
+            : `Dr. ${doc.fullName}`;
+          setDoctorName(formattedName);
+        }
+        if (doc && doc.specialization) {
+          setDoctorSpecialization(doc.specialization);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to parse logged-in doctor session:', e);
+    }
+  }, []);
 
   // Clock effect
   useEffect(() => {
@@ -89,6 +112,7 @@ function Dashboard() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('loggedInDoctor');
     window.location.pathname = '/';
   };
 
@@ -134,8 +158,8 @@ function Dashboard() {
           <div className="doctor-badge">
             <div className="badge-avatar">MD</div>
             <div>
-              <strong>Dr. Vijith Artham</strong>
-              <span>General Medicine</span>
+              <strong>{doctorName}</strong>
+              <span>{doctorSpecialization}</span>
             </div>
           </div>
           <button className="logout-btn" onClick={handleLogout}>
@@ -149,7 +173,7 @@ function Dashboard() {
         {/* Header toolbar */}
         <header className="dash-toolbar">
           <div>
-            <h1>Welcome Back, Dr. Vijith</h1>
+            <h1>Welcome Back, {doctorName.replace(/^Dr\.\s+/i, '')}</h1>
             <p>Your clinical sanctuary is fully operational.</p>
           </div>
           <div className="toolbar-stats">

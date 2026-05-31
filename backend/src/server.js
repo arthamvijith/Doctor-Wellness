@@ -410,6 +410,169 @@ app.post('/api/doctor-registrations/setup-mpin', async (req, res) => {
 });
 
 
+// --- Doctor Login Endpoints ---
+
+app.post('/api/doctor-login/request-otp', async (req, res) => {
+  if (!isDatabaseReady()) {
+    return res.status(503).json({ message: 'Database is not connected' });
+  }
+
+  const email = normalizeEmail(req.body.email);
+  if (!email) {
+    return res.status(400).json({ message: 'Email address is required' });
+  }
+
+  try {
+    const registration = await DoctorRegistration.findOne({ email });
+
+    if (!registration) {
+      return res.status(404).json({ message: 'This email is not registered with us. Please sign up with a fresh email.' });
+    }
+
+    const otp = createOtp();
+    registration.otpHash = hashOtp(otp);
+    registration.otpExpiresAt = new Date(Date.now() + otpExpiryMinutes * 60 * 1000);
+    registration.otpVerifiedAt = null;
+    await registration.save();
+
+    await sendOtpEmail({ email, fullName: registration.fullName, otp });
+
+    return res.status(200).json({
+      message: 'OTP sent to email',
+      email: registration.email
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Unable to send OTP',
+      details: error.message
+    });
+  }
+});
+
+app.post('/api/doctor-login/verify-otp', async (req, res) => {
+  if (!isDatabaseReady()) {
+    return res.status(503).json({ message: 'Database is not connected' });
+  }
+
+  const email = normalizeEmail(req.body.email);
+  const otp = String(req.body.otp || '').trim();
+
+  if (!email || !/^\d{6}$/.test(otp)) {
+    return res.status(400).json({ message: 'Please enter a valid 6 digit OTP' });
+  }
+
+  try {
+    const registration = await DoctorRegistration.findOne({ email });
+
+    if (!registration || !registration.otpHash || !registration.otpExpiresAt) {
+      return res.status(400).json({ message: 'OTP request was not found' });
+    }
+
+    if (registration.otpExpiresAt.getTime() < Date.now()) {
+      return res.status(400).json({ message: 'OTP has expired. Please request a new one.' });
+    }
+
+    if (registration.otpHash !== hashOtp(otp)) {
+      return res.status(400).json({ message: 'Incorrect OTP' });
+    }
+
+    registration.otpVerifiedAt = new Date();
+    await registration.save();
+
+    return res.status(200).json({
+      message: 'OTP verified successfully',
+      email: registration.email
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Unable to verify OTP',
+      details: error.message
+    });
+  }
+});
+
+app.post('/api/doctor-login/verify-mpin', async (req, res) => {
+  if (!isDatabaseReady()) {
+    return res.status(503).json({ message: 'Database is not connected' });
+  }
+
+  const email = normalizeEmail(req.body.email);
+  const mpin = String(req.body.mpin || '').trim();
+
+  if (!email || !/^\d{4}$/.test(mpin)) {
+    return res.status(400).json({ message: 'MPIN must be exactly a 4-digit number' });
+  }
+
+  try {
+    const registration = await DoctorRegistration.findOne({ email });
+
+    if (!registration) {
+      return res.status(404).json({ message: 'Doctor registration not found' });
+    }
+
+    if (!registration.mpin) {
+      return res.status(400).json({ message: 'MPIN has not been set up yet. Please register or complete setup first.' });
+    }
+
+    const hashedMpin = crypto.createHash('sha256').update(mpin).digest('hex');
+    if (registration.mpin !== hashedMpin) {
+      return res.status(401).json({ message: 'Incorrect MPIN. Please try again.' });
+    }
+
+    return res.status(200).json({
+      message: 'Login successful',
+      doctor: {
+        id: registration._id,
+        fullName: registration.fullName,
+        email: registration.email,
+        specialization: registration.specialization
+      }
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Unable to verify MPIN',
+      details: error.message
+    });
+  }
+});
+
+app.post('/api/doctor-login/google', async (req, res) => {
+  if (!isDatabaseReady()) {
+    return res.status(503).json({ message: 'Database is not connected' });
+  }
+
+  const email = normalizeEmail(req.body.email);
+  if (!email) {
+    return res.status(400).json({ message: 'Email is required' });
+  }
+
+  try {
+    const registration = await DoctorRegistration.findOne({ email });
+
+    if (!registration) {
+      return res.status(404).json({
+        message: 'This Google account is not registered with us. Please sign up with a fresh email.'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Login successful',
+      doctor: {
+        id: registration._id,
+        fullName: registration.fullName,
+        email: registration.email,
+        specialization: registration.specialization
+      }
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'Unable to verify Google Login',
+      details: error.message
+    });
+  }
+});
+
+
 app.listen(port, () => {
   console.log(`Backend running on http://localhost:${port}`);
 });
