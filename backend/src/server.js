@@ -5,6 +5,8 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import nodemailer from 'nodemailer';
 import DoctorRegistration from './models/DoctorRegistration.js';
+import clinicRoutes from './routes/clinicRoutes.js';
+import patientRoutes from './routes/patientRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -47,6 +49,9 @@ if (mongoUri) {
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', message: 'Backend is ready' });
 });
+
+app.use('/api/clinics', clinicRoutes);
+app.use('/api/patients', patientRoutes);
 
 const isDatabaseReady = () => mongoUri && mongoose.connection.readyState === 1;
 
