@@ -339,6 +339,18 @@ function Dashboard() {
                             </span>
                           </div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            {patient.status !== 'Completed' && (
+                              <button
+                                type="button"
+                                className="btn-start-consultation-inline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.location.href = `/consultation?patientId=${patient._id || patient.id}`;
+                                }}
+                              >
+                                Start Consultation
+                              </button>
+                            )}
                             <button
                               type="button"
                               className="btn-edit-patient-inline"
@@ -403,7 +415,33 @@ function Dashboard() {
                     <td>{p.time}</td>
                     <td><span className={`status-pill ${p.status ? p.status.toLowerCase().replace(' ', '-') : 'waiting'}`}>{p.status}</span></td>
                     <td>
-                      <div style={{ display: 'flex', gap: '8px' }}>
+                      <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        {p.status !== 'Completed' && (
+                          <button
+                            type="button"
+                            className="btn-start-consultation-table"
+                            style={{
+                              height: '28px',
+                              padding: '0 12px',
+                              borderRadius: '6px',
+                              border: 'none',
+                              background: 'var(--primary)',
+                              color: '#ffffff',
+                              fontSize: '11px',
+                              fontWeight: 700,
+                              cursor: 'pointer',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              transition: 'all 180ms ease'
+                            }}
+                            onClick={() => {
+                              window.location.href = `/consultation?patientId=${p._id || p.id}`;
+                            }}
+                          >
+                            Start Consultation
+                          </button>
+                        )}
                         <button
                           type="button"
                           className="btn-edit-patient-table"

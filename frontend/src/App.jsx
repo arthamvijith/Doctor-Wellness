@@ -4,6 +4,7 @@ import Register from './pages/Register.jsx';
 import SignIn from './pages/SignIn.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import SetupMpin from './pages/SetupMpin.jsx';
+import Consultation from './pages/Consultation.jsx';
 
 function App() {
   if (window.location.pathname === '/signin') {
@@ -20,6 +21,10 @@ function App() {
 
   if (window.location.pathname === '/setup-mpin') {
     return <SetupMpin />;
+  }
+
+  if (window.location.pathname.startsWith('/consultation')) {
+    return <Consultation />;
   }
 
   if (window.location.pathname === '/dashboard') {
